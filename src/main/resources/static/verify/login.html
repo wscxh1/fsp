@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: "思源黑体 normal", "微软雅黑 Light", monospace;
+        }
+
+        form h2 {
+            background-color: #fb894b;
+            color: #fff;
+            margin: 0 0 .7em;
+            padding: 3px 8px;
+            font-size: 120%;
+            line-height: 100%;
+
+        }
+
+        #login_box {
+            border: silver 1px solid;
+            width: 300px;
+            height: 250px;
+            background: url(image/box_back_gray4.png);
+            text-align: center;
+        }
+
+        #login_box input {
+            margin-top: 10px;
+        }
+
+        #login_box div {
+            width: 250px;
+            text-align: right;
+            display: inline-block;
+        }
+
+        .normal_box {
+            display: inline-block;
+            box-shadow: 5px 5px 10px #888888;
+            border: black 1px solid;
+
+        }
+
+        .normal_radius {
+            /*border-radius:10px;*/
+        }
+
+    </style>
+</head>
+<body>
+<div id="login_box" class="normal_box normal_radius">
+
+    <form>
+        <h2>登录</h2>
+        <div>
+            <label>
+                邮箱：
+                <input type="text" name="email">
+            </label><br>
+            <label>
+                密码：
+                <input type="password" name="password">
+            </label><br>
+            <label>
+                验证码：
+                <input type="text" name="verifyCode">
+                <img id="verifyCode" src="/verify/login/code.jpg" alt="验证码"/>
+            </label><br>
+            <label>
+                记住登录：
+                <input type="checkbox" name="autologin" value="True">
+            </label><br>
+            <input type="submit" value="登录">
+        </div>
+    </form>
+</div>
+<script>
+
+</script>
+</body>
+</html>

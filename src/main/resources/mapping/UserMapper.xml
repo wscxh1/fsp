@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foodshare.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.foodshare.entity.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="usertype" jdbcType="TINYINT" property="usertype" />
+    <result column="isreal" jdbcType="TINYINT" property="isreal" />
+    <result column="phone" jdbcType="CHAR" property="phone" />
+    <result column="isdeleted" jdbcType="TINYINT" property="isdeleted" />
+    <result column="pswd" jdbcType="CHAR" property="pswd" />
+    <result column="salt" jdbcType="CHAR" property="salt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, nickname, email, usertype, isreal, phone, isdeleted, pswd, salt
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.foodshare.entity.User">
+    insert into user (id, nickname, email, 
+      usertype, isreal, phone, 
+      isdeleted, pswd, salt)
+    values (#{id,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{usertype,jdbcType=TINYINT}, #{isreal,jdbcType=TINYINT}, #{phone,jdbcType=CHAR}, 
+      #{isdeleted,jdbcType=TINYINT}, #{pswd,jdbcType=CHAR}, #{salt,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.foodshare.entity.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="usertype != null">
+        usertype,
+      </if>
+      <if test="isreal != null">
+        isreal,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="isdeleted != null">
+        isdeleted,
+      </if>
+      <if test="pswd != null">
+        pswd,
+      </if>
+      <if test="salt != null">
+        salt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="usertype != null">
+        #{usertype,jdbcType=TINYINT},
+      </if>
+      <if test="isreal != null">
+        #{isreal,jdbcType=TINYINT},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=CHAR},
+      </if>
+      <if test="isdeleted != null">
+        #{isdeleted,jdbcType=TINYINT},
+      </if>
+      <if test="pswd != null">
+        #{pswd,jdbcType=CHAR},
+      </if>
+      <if test="salt != null">
+        #{salt,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foodshare.entity.User">
+    update user
+    <set>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="usertype != null">
+        usertype = #{usertype,jdbcType=TINYINT},
+      </if>
+      <if test="isreal != null">
+        isreal = #{isreal,jdbcType=TINYINT},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=CHAR},
+      </if>
+      <if test="isdeleted != null">
+        isdeleted = #{isdeleted,jdbcType=TINYINT},
+      </if>
+      <if test="pswd != null">
+        pswd = #{pswd,jdbcType=CHAR},
+      </if>
+      <if test="salt != null">
+        salt = #{salt,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foodshare.entity.User">
+    update user
+    set nickname = #{nickname,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      usertype = #{usertype,jdbcType=TINYINT},
+      isreal = #{isreal,jdbcType=TINYINT},
+      phone = #{phone,jdbcType=CHAR},
+      isdeleted = #{isdeleted,jdbcType=TINYINT},
+      pswd = #{pswd,jdbcType=CHAR},
+      salt = #{salt,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
