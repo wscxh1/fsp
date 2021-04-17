@@ -20,16 +20,15 @@ public class TController {
         this.userService = userService;
     }
 
-    @RequestMapping("/t1/{id}")
+    @RequestMapping("/t1/{name}")
     @ResponseBody
-    public User t1(@PathVariable("id") Integer id) {
+    public Object t1(@PathVariable("name") String name) {
 //        HttpSession session = request.getSession();
 //        session.setAttribute("hello","123123123");
 //        return String.valueOf(session.getAttribute("hello"));
 //        User user = new User(1,"SB萨比","616690324@qq.com",(byte)1,(byte)0,null,(byte)0,"123456","null");
 //        userService.set(user);
-        System.out.println("aaa");
-        return new User(1,"SB萨比","616690324@qq.com",(byte)1,(byte)0,null,(byte)0,"123456","null");
+        return userService.queryByName(name,1,1);
     }
 
     @RequestMapping("/t2")

@@ -1,11 +1,10 @@
-package com.foodshare.controller.login;
+package com.foodshare.controller.verify;
 
 import com.foodshare.controller.RequestLimit;
 import com.foodshare.service.VerifyCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.annotation.RequestScope;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -31,6 +30,11 @@ public class LoginController {
         return "/verify/login.html";
     }
 
+    @GetMapping("/register")
+    public String register() {
+        return "/verify/register.html";
+    }
+
     @PostMapping("/login")
     public Object login(@RequestParam("email") String email, String password, String verifyCode) {
         //在session放入user对象
@@ -39,7 +43,6 @@ public class LoginController {
     }
 
     @GetMapping("/login/code.jpg")
-    @ResponseBody
     @RequestLimit(count = 5,time = 10)
     public void getCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String randomCode = verifyCodeService.getCode(verifyCodeService.getCodeCount());
