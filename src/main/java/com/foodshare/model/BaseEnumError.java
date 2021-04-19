@@ -1,4 +1,4 @@
-package com.foodshare.response;
+package com.foodshare.model;
 
 import lombok.Getter;
 

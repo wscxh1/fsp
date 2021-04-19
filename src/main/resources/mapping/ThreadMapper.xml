@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foodshare.mapper.ThreadMapper">
+  <resultMap id="BaseResultMap" type="com.foodshare.entity.Thread">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="reply_to" jdbcType="BIGINT" property="replyTo" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="author" jdbcType="INTEGER" property="author" />
+    <result column="isdeleted" jdbcType="TINYINT" property="isdeleted" />
+    <result column="istheme" jdbcType="TINYINT" property="istheme" />
+    <result column="edit_time" jdbcType="BIGINT" property="editTime" />
+    <result column="create_time" jdbcType="BIGINT" property="createTime" />
+    <result column="reply_time" jdbcType="BIGINT" property="replyTime" />
+    <result column="reply_size" jdbcType="INTEGER" property="replySize" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, reply_to, title, content, author, isdeleted, istheme, edit_time, create_time, 
+    reply_time, reply_size
+  </sql>
+  <select id="selectByExample" parameterType="com.foodshare.entity.ThreadExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from thread
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from thread
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from thread
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.foodshare.entity.ThreadExample">
+    delete from thread
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.foodshare.entity.Thread">
+    insert into thread (id, reply_to, title, 
+      content, author, isdeleted, 
+      istheme, edit_time, create_time, 
+      reply_time, reply_size)
+    values (#{id,jdbcType=BIGINT}, #{replyTo,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, 
+      #{content,jdbcType=VARCHAR}, #{author,jdbcType=INTEGER}, #{isdeleted,jdbcType=TINYINT}, 
+      #{istheme,jdbcType=TINYINT}, #{editTime,jdbcType=BIGINT}, #{createTime,jdbcType=BIGINT}, 
+      #{replyTime,jdbcType=BIGINT}, #{replySize,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.foodshare.entity.Thread">
+    insert into thread
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="replyTo != null">
+        reply_to,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="author != null">
+        author,
+      </if>
+      <if test="isdeleted != null">
+        isdeleted,
+      </if>
+      <if test="istheme != null">
+        istheme,
+      </if>
+      <if test="editTime != null">
+        edit_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="replyTime != null">
+        reply_time,
+      </if>
+      <if test="replySize != null">
+        reply_size,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="replyTo != null">
+        #{replyTo,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=INTEGER},
+      </if>
+      <if test="isdeleted != null">
+        #{isdeleted,jdbcType=TINYINT},
+      </if>
+      <if test="istheme != null">
+        #{istheme,jdbcType=TINYINT},
+      </if>
+      <if test="editTime != null">
+        #{editTime,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=BIGINT},
+      </if>
+      <if test="replyTime != null">
+        #{replyTime,jdbcType=BIGINT},
+      </if>
+      <if test="replySize != null">
+        #{replySize,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.foodshare.entity.ThreadExample" resultType="java.lang.Long">
+    select count(*) from thread
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update thread
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.replyTo != null">
+        reply_to = #{record.replyTo,jdbcType=BIGINT},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.author != null">
+        author = #{record.author,jdbcType=INTEGER},
+      </if>
+      <if test="record.isdeleted != null">
+        isdeleted = #{record.isdeleted,jdbcType=TINYINT},
+      </if>
+      <if test="record.istheme != null">
+        istheme = #{record.istheme,jdbcType=TINYINT},
+      </if>
+      <if test="record.editTime != null">
+        edit_time = #{record.editTime,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=BIGINT},
+      </if>
+      <if test="record.replyTime != null">
+        reply_time = #{record.replyTime,jdbcType=BIGINT},
+      </if>
+      <if test="record.replySize != null">
+        reply_size = #{record.replySize,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update thread
+    set id = #{record.id,jdbcType=BIGINT},
+      reply_to = #{record.replyTo,jdbcType=BIGINT},
+      title = #{record.title,jdbcType=VARCHAR},
+      content = #{record.content,jdbcType=VARCHAR},
+      author = #{record.author,jdbcType=INTEGER},
+      isdeleted = #{record.isdeleted,jdbcType=TINYINT},
+      istheme = #{record.istheme,jdbcType=TINYINT},
+      edit_time = #{record.editTime,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=BIGINT},
+      reply_time = #{record.replyTime,jdbcType=BIGINT},
+      reply_size = #{record.replySize,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foodshare.entity.Thread">
+    update thread
+    <set>
+      <if test="replyTo != null">
+        reply_to = #{replyTo,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+        author = #{author,jdbcType=INTEGER},
+      </if>
+      <if test="isdeleted != null">
+        isdeleted = #{isdeleted,jdbcType=TINYINT},
+      </if>
+      <if test="istheme != null">
+        istheme = #{istheme,jdbcType=TINYINT},
+      </if>
+      <if test="editTime != null">
+        edit_time = #{editTime,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=BIGINT},
+      </if>
+      <if test="replyTime != null">
+        reply_time = #{replyTime,jdbcType=BIGINT},
+      </if>
+      <if test="replySize != null">
+        reply_size = #{replySize,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foodshare.entity.Thread">
+    update thread
+    set reply_to = #{replyTo,jdbcType=BIGINT},
+      title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      author = #{author,jdbcType=INTEGER},
+      isdeleted = #{isdeleted,jdbcType=TINYINT},
+      istheme = #{istheme,jdbcType=TINYINT},
+      edit_time = #{editTime,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=BIGINT},
+      reply_time = #{replyTime,jdbcType=BIGINT},
+      reply_size = #{replySize,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.foodshare.entity.ThreadExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from thread
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectCondition" parameterType="map" resultMap="BaseResultMap">
+    select ${fields} from thread
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </select>
+</mapper>

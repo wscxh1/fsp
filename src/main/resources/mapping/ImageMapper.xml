@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foodshare.mapper.ImageMapper">
+  <resultMap id="BaseResultMap" type="com.foodshare.entity.Image">
+    <id column="md5" jdbcType="CHAR" property="md5" />
+    <result column="date" jdbcType="CHAR" property="date" />
+    <result column="postfix" jdbcType="CHAR" property="postfix" />
+    <result column="thumbnail_md5" jdbcType="CHAR" property="thumbnailMd5" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    md5, date, postfix, thumbnail_md5
+  </sql>
+  <select id="selectByExample" parameterType="com.foodshare.entity.ImageExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from img
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from img
+    where md5 = #{md5,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from img
+    where md5 = #{md5,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.foodshare.entity.ImageExample">
+    delete from img
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.foodshare.entity.Image">
+    insert into img (md5, date, postfix, thumbnail_md5
+      )
+    values (#{md5,jdbcType=CHAR}, #{date,jdbcType=CHAR}, #{postfix,jdbcType=CHAR}, #{thumbnailMd5,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.foodshare.entity.Image">
+    insert into img
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="md5 != null">
+        md5,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="postfix != null">
+        postfix,
+      </if>
+      <if test="thumbnailMd5 != null">
+        thumbnail_md5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="md5 != null">
+        #{md5,jdbcType=CHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=CHAR},
+      </if>
+      <if test="postfix != null">
+        #{postfix,jdbcType=CHAR},
+      </if>
+      <if test="thumbnailMd5 != null">
+        #{thumbnailMd5,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.foodshare.entity.ImageExample" resultType="java.lang.Long">
+    select count(*) from img
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update img
+    <set>
+      <if test="record.md5 != null">
+        md5 = #{record.md5,jdbcType=CHAR},
+      </if>
+      <if test="record.date != null">
+        date = #{record.date,jdbcType=CHAR},
+      </if>
+      <if test="record.postfix != null">
+        postfix = #{record.postfix,jdbcType=CHAR},
+      </if>
+      <if test="record.thumbnailMd5 != null">
+        thumbnail_md5 = #{record.thumbnailMd5,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update img
+    set md5 = #{record.md5,jdbcType=CHAR},
+      date = #{record.date,jdbcType=CHAR},
+      postfix = #{record.postfix,jdbcType=CHAR},
+      thumbnail_md5 = #{record.thumbnailMd5,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foodshare.entity.Image">
+    update img
+    <set>
+      <if test="date != null">
+        date = #{date,jdbcType=CHAR},
+      </if>
+      <if test="postfix != null">
+        postfix = #{postfix,jdbcType=CHAR},
+      </if>
+      <if test="thumbnailMd5 != null">
+        thumbnail_md5 = #{thumbnailMd5,jdbcType=CHAR},
+      </if>
+    </set>
+    where md5 = #{md5,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foodshare.entity.Image">
+    update img
+    set date = #{date,jdbcType=CHAR},
+      postfix = #{postfix,jdbcType=CHAR},
+      thumbnail_md5 = #{thumbnailMd5,jdbcType=CHAR}
+    where md5 = #{md5,jdbcType=CHAR}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.foodshare.entity.ImageExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from img
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectCondition" parameterType="map" resultMap="BaseResultMap">
+    select ${fields} from img
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </select>
+</mapper>

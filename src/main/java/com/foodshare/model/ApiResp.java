@@ -1,4 +1,4 @@
-package com.foodshare.response;
+package com.foodshare.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

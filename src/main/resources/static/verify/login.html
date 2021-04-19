@@ -56,12 +56,13 @@
 </head>
 <body>
 <div id="login_box" class="normal_box normal_radius">
-    <form>
+    <form action="/login" method="post">
         <h2>登录</h2>
         <div>
+<!--            <p th:if="${param.error}" class="bg-danger">有错误，请重试</p>-->
             <label>
-                邮箱：
-                <input type="text" name="email">
+                用户名：
+                <input type="text" name="username">
             </label><br>
             <label>
                 密码：
@@ -71,13 +72,13 @@
                 验证码：
                 <input type="text" name="verifyCode">
             </label><br>
-            <img id="verifyCode" src="/verify/login/code.jpg" alt="验证码"/><br>
+            <img id="verifyCode" src="/login/code.jpg" alt="验证码"/><br>
             <label>
                 记住登录：
                 <input type="checkbox" name="autologin" value="True">
             </label><br>
             <input onclick="location.href='./register.html'" type="button" value="注册">
-            <input id="btn-login" type="button" value="登录">
+            <input id="btn-login" type="submit" value="登录">
         </div>
     </form>
 </div>
@@ -104,7 +105,7 @@
     function bindVerifyImgEvent() {
         let verifyCode = $("#verifyCode");
         $(verifyCode).click(() => {
-            document.getElementById("verifyCode").src = "/verify/login/code.jpg?" + dateUtils.getNowTimes();
+            document.getElementById("verifyCode").src = "/login/code.jpg?" + dateUtils.getNowTimes();
         });
 
         $(verifyCode).error((e) => {
