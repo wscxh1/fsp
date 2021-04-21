@@ -4,100 +4,184 @@
     <meta charset="UTF-8">
     <title>登录</title>
     <script src="../lib/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+    <script src="../lib/layui/layui.js"></script>
     <style>
         body {
-            text-align: center;
-            font-family: "思源黑体 normal", "微软雅黑 Light", monospace;
+            text-align: center
         }
 
-        form h2 {
-            background-color: #fb894b;
-            color: #fff;
-            margin: 0 0 .7em;
-            padding: 3px 8px;
-            font-size: 120%;
-            line-height: 100%;
+        #verify-form {
+            width: 400px !important;
+            box-shadow: -2px 4px 10px;
+            padding: 3px 10px 3px 3px;
+            margin: 10px auto
         }
-
-        #login_box {
-            border: silver 1px solid;
-            width: 300px;
-            background: url(../lib/image/box_back_gray4.png);
-            text-align: center;
-        }
-
-        #login_box input {
-            margin-top: 10px;
-        }
-
-        #login_box #verifyCode {
-            margin-top: 10px;
-        }
-
-        #login_box div {
-            width: 250px;
-            margin-bottom: 10px;
-            text-align: right;
-            display: inline-block;
-        }
-
-        .normal_box {
-            display: inline-block;
-            box-shadow: 5px 5px 10px #888888;
-            border: black 1px solid;
-
-        }
-
-        .normal_radius {
-            /*border-radius:10px;*/
-        }
-
     </style>
 </head>
 <body>
-<div id="login_box" class="normal_box normal_radius">
-    <form action="/login" method="post">
-        <h2>登录</h2>
-        <div>
-<!--            <p th:if="${param.error}" class="bg-danger">有错误，请重试</p>-->
-            <label>
-                用户名：
-                <input type="text" name="username">
-            </label><br>
-            <label>
-                密码：
-                <input type="password" name="password">
-            </label><br>
-            <label>
-                验证码：
-                <input type="text" name="verifyCode">
-            </label><br>
-            <img id="verifyCode" src="/login/code.jpg" alt="验证码"/><br>
-            <label>
-                记住登录：
-                <input type="checkbox" name="autologin" value="True">
-            </label><br>
-            <input onclick="location.href='./register.html'" type="button" value="注册">
-            <input id="btn-login" type="submit" value="登录">
+<div id="verify-form">
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">登录</li>
+            <li>注册</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form" id="login-form">
+                    <div class="layui-form-item">
+                        <label for="input_username" class="layui-form-label">用户名</label>
+                        <div class="layui-input-block">
+                            <input id="input_username" type="text" name="username" lay-verify="required"
+                                   lay-reqtext="用户名是必填项" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="input_password" class="layui-form-label">密码</label>
+                        <div class="layui-input-block">
+                            <input id="input_password" type="password" name="password" lay-verify="required|pass"
+                                   lay-reqtext="密码是必填项" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="input_verifyCode" class="layui-form-label">验证码</label>
+                        <div class="layui-input-block">
+                            <input id="input_verifyCode" type="text" name="verifyCode" lay-verify="required|verifyCode"
+                                   lay-reqtext="验证码是必填项" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <img id="verifyCode" src="/login/code" alt="验证码"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label for="input_autologin" class="layui-form-label">自动登录</label>
+                        <div class="layui-input-block">
+                            <input id="input_autologin" type="checkbox" checked="" name="autologin" lay-skin="switch"
+                                   lay-filter="switchTest" lay-text="ON|OFF">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="button" class="layui-btn" lay-submit="" lay-filter="login">登录</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <form class="layui-form" id="/register">
+                    <div class="layui-form-item">
+                        <label for="input_register_nickname" class="layui-form-label">用户名</label>
+                        <div class="layui-input-block">
+                            <input id="input_register_nickname" type="text" name="nickname" lay-verify="required"
+                                   lay-reqtext="用户名是必填项" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="input_register_email" class="layui-form-label">邮箱</label>
+                        <div class="layui-input-block">
+                            <input id="input_register_email" type="text" name="email" lay-verify="required|email"
+                                   lay-reqtext="邮箱是必填项" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="input_register_phone" class="layui-form-label">手机</label>
+                        <div class="layui-input-block">
+                            <input id="input_register_phone" type="text" name="phone" lay-verify="phone"
+                                   placeholder="不是必填项" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="input_register_password" class="layui-form-label">密码</label>
+                        <div class="layui-input-block">
+                            <input id="input_register_password" type="password" name="password"
+                                   lay-verify="required|pass"
+                                   lay-reqtext="密码是必填项" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="input_register_verifyCode" class="layui-form-label">验证码</label>
+                        <div class="layui-input-block">
+                            <input id="input_register_verifyCode" type="text" name="verifyCode"
+                                   lay-verify="required|verifyCode"
+                                   lay-reqtext="验证码是必填项" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <img id="register-verifyCode" src="/login/code" alt="验证码"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="button" class="layui-btn" lay-submit="" lay-filter="register">注册</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-    </form>
+    </div>
 </div>
 <script>
     // -------common component----------
     let dateUtils = {
-        getNowTimes : () => {
-          return new Date().getTime();
+        getNowTimes: () => {
+            return new Date().getTime();
         },
-        getTimesByDate : (date) => {
+        getTimesByDate: (date) => {
             return new Date(date);
         }
     }
 
+    let fileReader = {
+        reader: new FileReader(),
+        read: (blob, fun) => {
+            fileReader.reader.onload = fun;
+            fileReader.reader.readAsText(blob);
+        }
+    }
+
+    let formPoster = {
+        post: (url, form, sucess, error) => {
+            $.ajax({
+                type: "POST",   //提交的方法
+                url: url, //提交的地址
+                data: $(form).serialize(),// 序列化表单值
+                async: false,
+                error: error,
+                success: sucess
+            });
+        }
+    }
+
+    function getQueryString(key) {
+        let reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)", "i");
+        let r = window.location.search.substr(1).match(reg);
+        if (r != null) return (r[2]);
+        return null;
+    }
 
     //-----------------------------------
     let msg = {
-        errorVerifyCodeMSG : "验证码加载失败，请稍后稍后点击验证码进行刷新（由于接口有限制，请不要频繁刷新验证码）"
+        errorVerifyCode0: "Bad credentials",
+        errorVerifyCode1: "Captcha not matched",
+        errorVerifyCode2: "Captcha is expired",
+        errorVerifyCode3: "Captcha not existed",
+        errorVerifyCodeMSG0: "请检查密码和用户名",
+        errorVerifyCodeMSG1: "验证码不正确",
+        errorVerifyCodeMSG2: "验证码已经过期",
+        errorVerifyCodeMSG3: "验证码不存在，请刷新验证码"
     }
+
+    let originResponse;
+
+    //---------------------------
+
     $(document).ready(() => {
         bindVerifyImgEvent();
     });
@@ -105,18 +189,119 @@
     function bindVerifyImgEvent() {
         let verifyCode = $("#verifyCode");
         $(verifyCode).click(() => {
-            document.getElementById("verifyCode").src = "/login/code.jpg?" + dateUtils.getNowTimes();
+            getVerifyImg();
         });
 
         $(verifyCode).error((e) => {
-            console.log(JSON.stringify(e));
-            alert(msg.errorVerifyCodeMSG);
+            fileReader.read(originResponse, () => {
+                let response = JSON.parse(fileReader.reader.result);
+                console.log(response);
+                if (response.code == 204) {
+                    alert(response.msg);
+                } else {
+                    alert("未知错误");
+                }
+            })
         });
-    }
-
-    function bindBtnEvent() {
 
     }
+
+    function getVerifyImg() {
+        let xmlHttp;
+        xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", "/login/code?" + dateUtils.getNowTimes(), true);
+        xmlHttp.responseType = "blob";
+        xmlHttp.onload = function () {
+            console.log(this);
+            if (this.status == 200) {
+                let blob = this.response;
+                originResponse = this.response;
+                let img = document.getElementById("verifyCode");
+                img.onload = function (e) {
+                    window.URL.revokeObjectURL(img.src);
+                };
+                img.src = window.URL.createObjectURL(blob);
+            }
+        }
+        xmlHttp.send();
+    }
+
+    function login() {
+        formPoster.post("/login",
+            $("#login-form"),
+            (response) => {
+                console.log(response);
+                response = JSON.parse(response)
+                if (response.code == 0) {
+                    alert("登录成功，将跳转到主页");
+                    window.location.href = "/";
+                } else if (response.code == 104) {
+                    switch (response.data) {
+                        case msg.errorVerifyCode0:
+                            alert(msg.errorVerifyCodeMSG0);
+                            break;
+                        case msg.errorVerifyCode1:
+                            alert(msg.errorVerifyCodeMSG1);
+                            break;
+                        case msg.errorVerifyCode2:
+                            alert(msg.errorVerifyCodeMSG2);
+                            break;
+                        case msg.errorVerifyCode3:
+                            alert(msg.errorVerifyCodeMSG3)
+                            break;
+                        default:
+                            alert("未知错误");
+                    }
+                } else {
+                    console.log(response);
+                    alert("未知错误")
+                }
+            },
+            (XMLHttpRequest, textStatus, errorThrown) => {
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
+        );
+    }
+
+    function register() {
+
+    }
+
+    //----------------------------
+    layui.use(['form', 'layedit'], function () {
+        let form = layui.form
+            , layedit = layui.layedit;
+
+        //自定义验证规则
+        form.verify({
+            pass: [
+                /^[\S]{6,16}$/
+                , '密码应为6到16位，且不能出现空格'
+            ],
+            verifyCode: [
+                /^[A-Z0-9a-z]{4}$/
+                , '验证码应为4位，且为数字和字母的组合'
+            ]
+        });
+
+        //监听提交
+        form.on('submit(login)', (data) => {
+            login();
+            return false;
+        });
+        //监听提交
+        form.on('submit(register)', (data) => {
+            register();
+            return false;
+        });
+
+        if (getQueryString("register") == "1") {
+            console.log("aaaaaaa")
+            $(".layui-tab-title li:contains('注册')").click();
+        }
+
+    });
 </script>
 </body>
 </html>

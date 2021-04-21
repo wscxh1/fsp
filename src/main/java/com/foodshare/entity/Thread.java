@@ -1,6 +1,8 @@
 package com.foodshare.entity;
 
-public class Thread {
+import java.io.Serializable;
+
+public class Thread implements Serializable {
     private Long id;
 
     private Long replyTo;

@@ -26,6 +26,7 @@ public enum BaseEnumError implements IEnumError {
 
     SYSTEM_NO_LOGIN(201, "用户未登录"),
     SERVICE_ERROR(202, "服务暂不可用，请稍后重试"),
+    SERVICE_LIMIT(204, "访问过于频繁"),
     SERVICE_DOWN(203, "服务[${serviceId}]暂不可用，请稍后重试");
 
     /**

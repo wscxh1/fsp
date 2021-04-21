@@ -6,23 +6,22 @@ import com.foodshare.mapper.UserMapper;
 import com.foodshare.service.UserService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
     public static final String SESSION_USER_TAG = "FSP_LOGIN_USER";
+    @Resource
     UserMapper userMapper;
-
-    @Autowired
-    public void setUserMapper(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
 
     @Override
     public User getById(int id) {
@@ -93,8 +92,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             SecurityContextImpl securityContext = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
             if (securityContext != null) {
-                String userName = ((UserDetails) securityContext.getAuthentication().getPrincipal()).getUsername();
-                user = getByNickName(userName);
+                user = getLoginUser();
                 if (user != null) {
                     addUserToSession(session, user);
                 }
@@ -107,6 +105,21 @@ public class UserServiceImpl implements UserService {
     public void addUserToSession(HttpSession session, User user) {
         session.setAttribute(SESSION_USER_TAG, user);
     }
+
+    @Override
+    public User getLoginUser() {
+        UserDetails userDetails = getLoginUserDetails();
+        if (userDetails == null) return null;
+        return getByNickName(userDetails.getUsername());
+    }
+
+    @Override
+    public UserDetails getLoginUserDetails() {
+        return  (UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+    }
+
 
 
     private int getOffset(int num, int page) {

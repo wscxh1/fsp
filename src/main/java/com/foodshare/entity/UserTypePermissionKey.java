@@ -1,6 +1,8 @@
 package com.foodshare.entity;
 
-public class UserTypePermissionKey {
+import java.io.Serializable;
+
+public class UserTypePermissionKey implements Serializable {
     private Byte userTypeId;
 
     private Integer permissionId;

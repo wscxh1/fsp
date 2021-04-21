@@ -1,6 +1,8 @@
 package com.foodshare.entity;
 
-public class ThreadPosition {
+import java.io.Serializable;
+
+public class ThreadPosition implements Serializable {
     private Long threadId;
 
     private String location;

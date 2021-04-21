@@ -1,6 +1,8 @@
 package com.foodshare.entity;
 
-public class ThreadImgKey {
+import java.io.Serializable;
+
+public class ThreadImgKey implements Serializable {
     private Long threadId;
 
     private String imgMd5;

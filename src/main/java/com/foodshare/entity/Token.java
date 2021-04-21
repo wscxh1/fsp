@@ -1,6 +1,8 @@
 package com.foodshare.entity;
 
-public class Token {
+import java.io.Serializable;
+
+public class Token implements Serializable {
     private Integer userId;
 
     private String token;

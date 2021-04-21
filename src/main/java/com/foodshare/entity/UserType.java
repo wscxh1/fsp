@@ -1,6 +1,8 @@
 package com.foodshare.entity;
 
-public class UserType {
+import java.io.Serializable;
+
+public class UserType implements Serializable {
     private Byte id;
 
     private String name;

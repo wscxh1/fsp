@@ -1,6 +1,8 @@
 package com.foodshare.entity;
 
-public class UserPermission {
+import java.io.Serializable;
+
+public class UserPermission implements Serializable {
     private Integer id;
 
     private String name;

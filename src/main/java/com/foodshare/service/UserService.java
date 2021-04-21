@@ -1,6 +1,7 @@
 package com.foodshare.service;
 
 import com.foodshare.entity.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,5 +27,9 @@ public interface UserService {
     public User getSessionUser(HttpSession session);
 
     public void addUserToSession(HttpSession session, User user);
+
+    public User getLoginUser();
+
+    public UserDetails getLoginUserDetails();
 
 }

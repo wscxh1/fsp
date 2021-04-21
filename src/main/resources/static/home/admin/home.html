@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../../lib/layui/css/layui.css">
 </head>
 <body>
+
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo">平台管理</div>
@@ -63,6 +64,11 @@
         <div style="padding: 15px;">内容主体区域</div>
     </div>
 
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon layui-icon-spread-left"></i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
     <div class="layui-footer">
         <!-- 底部固定区域 -->
         底部固定区域
@@ -74,6 +80,17 @@
     //JavaScript代码区域
     layui.use('element', function(){
         var element = layui.element;
+        //手机设备的简单适配
+        var treeMobile = $('.site-tree-mobile')
+            ,shadeMobile = $('.site-mobile-shade')
+
+        treeMobile.on('click', function(){
+            $('body').addClass('site-mobile');
+        });
+
+        shadeMobile.on('click', function(){
+            $('body').removeClass('site-mobile');
+        })
 
     });
 </script>
