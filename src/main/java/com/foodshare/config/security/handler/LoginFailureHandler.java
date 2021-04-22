@@ -8,7 +8,6 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -18,17 +17,12 @@ import static com.foodshare.model.BaseEnumError.SYSTEM_ARGUMENT_NOT_VALID;
 @Component
 public class LoginFailureHandler implements AuthenticationFailureHandler {
 
-    @Resource
-    ObjectMapper objectMapper;
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                         AuthenticationException e) throws IOException {
+        httpServletResponse.setContentType("application/json");
         objectMapper.writeValue(httpServletResponse.getOutputStream(),
                 ApiResp.retFail(SYSTEM_ARGUMENT_NOT_VALID,
                         e.getMessage()));

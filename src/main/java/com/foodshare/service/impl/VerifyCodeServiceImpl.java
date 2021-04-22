@@ -1,18 +1,30 @@
 package com.foodshare.service.impl;
 
+import com.foodshare.config.security.ValidateCaptchaException;
+import com.foodshare.controller.verify.LoginController;
 import com.foodshare.service.VerifyCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
 @Service
 public class VerifyCodeServiceImpl implements VerifyCodeService {
+    private static final String CAPTCHA_IS_EMPTY = "Captcha is empty";
+    private static final String CAPTCHA_NOT_EXISTED = "Captcha not existed";
+    private static final String CAPTCHA_IS_EXPIRED = "Captcha is expired";
+    private static final String CAPTCHA_NOT_MATCHED = "Captcha not matched";
+    private static final String CAPTCHA = "verifyCode";
+
     @Component
     @ConfigurationProperties(prefix = "verify-code")
     static class VerifyCode {
@@ -114,4 +126,37 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
     public int getCodeCount() {
         return verifyCode.codeCount;
     }
+
+    public static void validateCode(HttpServletRequest httpServletRequest) throws AuthenticationException {
+        HttpSession session = httpServletRequest.getSession();
+        // 获取 session 中的验证码
+        String codeInSession = (String) session.getAttribute(LoginController.SESSION_KEY_VERIFY_CODE);
+        Long codeTime = (Long) session.getAttribute(LoginController.SESSION_KEY_VERIFY_CODE_TIME);
+        // 获取请求中的验证码
+        String codeInRequest = httpServletRequest.getParameter(CAPTCHA);
+
+        if (StringUtils.isEmpty(codeInRequest)) {
+            throw new ValidateCaptchaException(CAPTCHA_IS_EMPTY);
+        }
+        if (codeInSession == null) {
+            throw new ValidateCaptchaException(CAPTCHA_NOT_EXISTED);
+        }
+        boolean isExpire = (System.currentTimeMillis() - codeTime) > 60000;
+        System.out.println(codeTime);
+        if (isExpire) {
+            removeCode(session);
+            throw new ValidateCaptchaException(CAPTCHA_IS_EXPIRED);
+        }
+        if (!codeInSession.equalsIgnoreCase(codeInRequest)) {
+            throw new ValidateCaptchaException(CAPTCHA_NOT_MATCHED);
+        }
+
+        removeCode(session);
+    }
+
+    private static void removeCode(HttpSession session) {
+        session.removeAttribute(LoginController.SESSION_KEY_VERIFY_CODE);
+        session.removeAttribute(LoginController.SESSION_KEY_VERIFY_CODE_TIME);
+    }
+
 }

@@ -72,32 +72,32 @@
                 </form>
             </div>
             <div class="layui-tab-item">
-                <form class="layui-form" id="/register">
+                <form class="layui-form" id="register-form">
                     <div class="layui-form-item">
                         <label for="input_register_nickname" class="layui-form-label">用户名</label>
                         <div class="layui-input-block">
-                            <input id="input_register_nickname" type="text" name="nickname" lay-verify="required"
+                            <input id="input_register_nickname" type="text" name="nickname" lay-verify="required|uniqueNickname"
                                    lay-reqtext="用户名是必填项" placeholder="请输入" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label for="input_register_email" class="layui-form-label">邮箱</label>
                         <div class="layui-input-block">
-                            <input id="input_register_email" type="text" name="email" lay-verify="required|email"
+                            <input id="input_register_email" type="text" name="email" lay-verify="required|email|uniqueEmail"
                                    lay-reqtext="邮箱是必填项" placeholder="请输入" autocomplete="off" class="layui-input">
                         </div>
                     </div>
-                    <div class="layui-form-item">
-                        <label for="input_register_phone" class="layui-form-label">手机</label>
-                        <div class="layui-input-block">
-                            <input id="input_register_phone" type="text" name="phone" lay-verify="phone"
-                                   placeholder="不是必填项" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
+                    <!--                    <div class="layui-form-item">-->
+                    <!--                        <label for="input_register_phone" class="layui-form-label">手机</label>-->
+                    <!--                        <div class="layui-input-block">-->
+                    <!--                            <input id="input_register_phone" type="text" name="phone" lay-verify="phone"-->
+                    <!--                                   placeholder="不是必填项" autocomplete="off" class="layui-input">-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                     <div class="layui-form-item">
                         <label for="input_register_password" class="layui-form-label">密码</label>
                         <div class="layui-input-block">
-                            <input id="input_register_password" type="password" name="password"
+                            <input id="input_register_password" type="password" name="pswd"
                                    lay-verify="required|pass"
                                    lay-reqtext="密码是必填项" placeholder="请输入" autocomplete="off" class="layui-input">
                         </div>
@@ -120,6 +120,10 @@
                         <div class="layui-input-block">
                             <button type="button" class="layui-btn" lay-submit="" lay-filter="register">注册</button>
                             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div id="hint-panel" class="layui-input-block" style="min-height: 0; color: red">
                         </div>
                     </div>
                 </form>
@@ -217,10 +221,15 @@
                 let blob = this.response;
                 originResponse = this.response;
                 let img = document.getElementById("verifyCode");
+                let img2 = document.getElementById("register-verifyCode");
                 img.onload = function (e) {
                     window.URL.revokeObjectURL(img.src);
                 };
                 img.src = window.URL.createObjectURL(blob);
+                img2.onload = function (e) {
+                    window.URL.revokeObjectURL(img2.src);
+                };
+                img2.src = window.URL.createObjectURL(blob);
             }
         }
         xmlHttp.send();
@@ -231,27 +240,11 @@
             $("#login-form"),
             (response) => {
                 console.log(response);
-                response = JSON.parse(response)
                 if (response.code == 0) {
                     alert("登录成功，将跳转到主页");
                     window.location.href = "/";
                 } else if (response.code == 104) {
-                    switch (response.data) {
-                        case msg.errorVerifyCode0:
-                            alert(msg.errorVerifyCodeMSG0);
-                            break;
-                        case msg.errorVerifyCode1:
-                            alert(msg.errorVerifyCodeMSG1);
-                            break;
-                        case msg.errorVerifyCode2:
-                            alert(msg.errorVerifyCodeMSG2);
-                            break;
-                        case msg.errorVerifyCode3:
-                            alert(msg.errorVerifyCodeMSG3)
-                            break;
-                        default:
-                            alert("未知错误");
-                    }
+                    processVerifyCodeError(response.data);
                 } else {
                     console.log(response);
                     alert("未知错误")
@@ -264,8 +257,62 @@
         );
     }
 
-    function register() {
+    function processVerifyCodeError(responseMSG) {
+        switch (responseMSG) {
+            case msg.errorVerifyCode0:
+                alert(msg.errorVerifyCodeMSG0);
+                break;
+            case msg.errorVerifyCode1:
+                alert(msg.errorVerifyCodeMSG1);
+                break;
+            case msg.errorVerifyCode2:
+                alert(msg.errorVerifyCodeMSG2);
+                break;
+            case msg.errorVerifyCode3:
+                alert(msg.errorVerifyCodeMSG3)
+                break;
+            default:
+                alert("未知错误");
+        }
+    }
 
+    function register() {
+        formPoster.post("/register",
+            $("#register-form"),
+            (response) => {
+                console.log(response);
+                if (response.code == 0) {
+                    alert("注册成功");
+                    window.location.href = "/login";
+                } else if (response.code == 104) {
+                    processVerifyCodeError(response.data);
+                } else {
+                    console.log(response);
+                    alert("未知错误");
+                }
+            },
+            (XMLHttpRequest, textStatus, errorThrown) => {
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
+        );
+    }
+
+
+    function checkUniqueInput(url) {
+        response = $.ajax({
+            url: url,
+            async: false,
+            dataType: "json",
+            method: "GET"
+        }).responseJSON;
+        console.log(response);
+        if (response.code == 0) {
+            if (response.data == "no") {
+                return false;
+            }
+        }
+        return true;
     }
 
     //----------------------------
@@ -282,7 +329,18 @@
             verifyCode: [
                 /^[A-Z0-9a-z]{4}$/
                 , '验证码应为4位，且为数字和字母的组合'
-            ]
+            ],
+            uniqueNickname: (value) => {
+                if (!checkUniqueInput("/register/isNicknameUnique?nickname=" + value)) {
+                    return "用户名已经存在"
+                }
+            },
+            uniqueEmail: (value) => {
+                if (!checkUniqueInput("/register/isEmailUnique?email=" + value)) {
+                    return "邮箱地址已经存在"
+                }
+            }
+
         });
 
         //监听提交

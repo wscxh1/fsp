@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
@@ -31,13 +32,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     LoginFailureHandler failureHandler;
 
     @Resource
-    ValidateCaptchaFilter validateCaptchaFilter;
-
-    @Resource
     FilterInvocationSecurityMetadataSourceHandler securityMetadataSourceHandler;
 
     @Resource
     AccessDecisionHandler accessDecisionHandler;
+
+    @Resource
+    AuthenticationFailureHandler authenticationFailureHandler;
 
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
@@ -125,6 +126,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 });
 
         // 在用户名密码校验过滤器之前添加上验证码校验过滤器
-        http.addFilterBefore(validateCaptchaFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new ValidateCaptchaFilter(authenticationFailureHandler), UsernamePasswordAuthenticationFilter.class);
     }
 }

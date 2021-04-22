@@ -7,9 +7,12 @@ import com.foodshare.model.ApiResp;
 import com.foodshare.model.BaseEnumError;
 import com.foodshare.service.UserService;
 import com.foodshare.service.VerifyCodeService;
-import org.springframework.security.access.prepost.PreAuthorize;
+import com.foodshare.service.impl.VerifyCodeServiceImpl;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,6 +25,8 @@ import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import static com.foodshare.model.BaseEnumError.SYSTEM_ARGUMENT_NOT_VALID;
+
 @Controller
 @RequestMapping("/")
 public class LoginController extends AbstractSessionController {
@@ -33,6 +38,8 @@ public class LoginController extends AbstractSessionController {
     private VerifyCodeService verifyCodeService;
     @Resource
     private UserService userService;
+    @Resource
+    BCryptPasswordEncoder passwordEncoder;
 
 
     @GetMapping("/login")
@@ -50,7 +57,51 @@ public class LoginController extends AbstractSessionController {
         return ApiResp.retOK(user);
     }
 
+    @PostMapping("/register")
+    @ResponseBody
+    @RequestLimit(count = 10)
+    public Object register(User user, HttpServletRequest request, HttpServletResponse response) {
+        try {
+            VerifyCodeServiceImpl.validateCode(request);
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+            return ApiResp.retFail(SYSTEM_ARGUMENT_NOT_VALID,
+                    e.getMessage());
+        }
+        boolean isNotValid = user == null ||
+                user.getPswd() == null ||
+                user.getEmail() == null ||
+                user.getNickname() == null;
+        if (!isNotValid)isNotValid = !userService.isUnique(user.getEmail(),user.getNickname());
+        if (isNotValid) return ApiResp.retFail(SYSTEM_ARGUMENT_NOT_VALID);
+        System.out.println("ASASASAS:    " + user.getNickname());
+        user.setPswd(passwordEncoder.encode(user.getPswd().trim()));
+        user.setUsertype((byte)2);
+        user.setIsreal((byte)0);
+        user.setIsdeleted((byte)0);
+        userService.addUser(user);
+        return ApiResp.retOK();
+    }
 
+    @GetMapping("/register/isNicknameUnique")
+    @ResponseBody
+    @RequestLimit(count = 30, time = 120)
+    public Object isUserNameUnique(String nickname, HttpServletRequest request, HttpServletResponse response) {
+        if (nickname == null || !userService.isNickNameUnique(nickname)) {
+            return ApiResp.retOK("no");
+        }
+        return ApiResp.retOK("yes");
+    }
+
+    @GetMapping("/register/isEmailUnique")
+    @ResponseBody
+    @RequestLimit(count = 30, time = 120)
+    public Object isEmailUnique(String email, HttpServletRequest request, HttpServletResponse response) {
+        if (email == null || !userService.isEmailUnique(email)) {
+            return ApiResp.retOK("no");
+        }
+        return ApiResp.retOK("yes");
+    }
 
 
     @GetMapping("/login/code")

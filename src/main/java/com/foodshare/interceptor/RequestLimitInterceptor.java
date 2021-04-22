@@ -31,8 +31,7 @@ public class RequestLimitInterceptor {
     private static final Log logger = LogFactory.getLog(SpringApplication.class);
     @Resource
     private RedisUtil redisUtil;
-    @Resource
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Before("within(@org.springframework.web.bind.annotation.RequestMapping * ) && @annotation(limit)")
     public void requestLimit(final JoinPoint joinPoint, RequestLimit limit) throws RequestLimitException {

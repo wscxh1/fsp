@@ -15,13 +15,12 @@ import java.io.IOException;
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    @Resource
-    ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                         Authentication authentication) throws IOException, ServletException {
-
+        httpServletResponse.setContentType("application/json");
         objectMapper.writeValue(httpServletResponse.getOutputStream(),
                 ApiResp.retOK());
     }

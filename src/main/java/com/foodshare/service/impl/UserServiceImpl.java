@@ -69,21 +69,21 @@ public class UserServiceImpl implements UserService {
         UserExample example = new UserExample();
         example.or().andNicknameEqualTo(nickname);
         example.or().andEmailEqualTo(email);
-        return userMapper.countByExample(example) > 1;
+        return userMapper.countByExample(example) == 0;
     }
 
     @Override
     public boolean isEmailUnique(String email) {
         UserExample example = new UserExample();
         example.or().andEmailEqualTo(email);
-        return userMapper.countByExample(example) > 1;
+        return userMapper.countByExample(example) == 0;
     }
 
     @Override
     public boolean isNickNameUnique(String nickname) {
         UserExample example = new UserExample();
         example.or().andNicknameEqualTo(nickname);
-        return userMapper.countByExample(example) > 1;
+        return userMapper.countByExample(example) == 0;
     }
 
     @Override
