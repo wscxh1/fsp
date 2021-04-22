@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("admin")
+@RequestMapping("/admin")
 public class AdminController extends AbstractSessionController {
 
     @GetMapping("/home")
     public String home() {
-        return "/home/admin/admin.html";
+        return "/home/admin/home.html";
     }
 }
